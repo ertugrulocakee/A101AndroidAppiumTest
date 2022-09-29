@@ -1,23 +1,32 @@
 package Models;
 
 import Tests.BaseTest;
+
+
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.TouchAction;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
+
 import java.util.List;
+
+import static io.appium.java_client.touch.WaitOptions.waitOptions;
+import static io.appium.java_client.touch.offset.PointOption.point;
+import static java.time.Duration.ofMillis;
 
 public class BaseModel extends BaseTest {
 
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    WebDriverWait wait = new WebDriverWait(driver,10);
 
     public WebElement findElement(By by) {
         return driver.findElement(by);
     }
 
-    public List<WebElement> findElements(By by) {
+    public List<MobileElement> findElements(By by) {
         return driver.findElements(by);
     }
 
@@ -39,9 +48,21 @@ public class BaseModel extends BaseTest {
 
     public  void sendKeys(By by, String str){
 
-        // wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(by));
         findElement(by).sendKeys(str);
 
+    }
+
+    public void verticalSwipeByPercentages(double startPercentage, double endPercentage, double anchorPercentage) {
+        Dimension size = driver.manage().window().getSize();
+        int anchor = (int) (size.width * anchorPercentage);
+        int startPoint = (int) (size.height * startPercentage);
+        int endPoint = (int) (size.height * endPercentage);
+        new TouchAction(driver)
+                .press(point(anchor, startPoint))
+                .waitAction(waitOptions(ofMillis(1000)))
+                .moveTo(point(anchor, endPoint))
+                .release().perform();
     }
 
     public  void  clearText(By by){
@@ -52,7 +73,7 @@ public class BaseModel extends BaseTest {
     }
 
     public void clickList(By by, int index){
-        List<WebElement> list = findElements(by);
+        List<MobileElement> list = findElements(by);
         clickElement(list.get(index));
     }
 
