@@ -1,11 +1,13 @@
 package Tests;
 
 
+import Loggers.TestResultLogger;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.remote.MobilePlatform;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.URL;
@@ -14,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@ExtendWith(TestResultLogger.class)
 public class BaseTest {
 
 
@@ -41,7 +44,7 @@ public class BaseTest {
      @AfterAll
      public  void tearDown(){
 
-        // driver.quit();
+         driver.quit();
 
      }
 
